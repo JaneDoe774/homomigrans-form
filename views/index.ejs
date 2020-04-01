@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://hackerinnen.space/css/bulma.min.css" />
+    <link
+      href="https://hackerinnen.space/fontawesome/css/all.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://hackerinnen.space/scss/main.css"
+      media="screen"
+    />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="https://hackerinnen.space/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://hackerinnen.space/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="https://hackerinnen.space/favicon/favicon-16x16.png"
+    />
+    <link
+      rel="mask-icon"
+      href="https://hackerinnen.space/favicon/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <header>
+
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <% if (typeof success != "undefined") { %>
+          <div class="notification is-primary">
+            <button class="delete" type="button"></button>
+            <b>
+              <%= success %>
+              <a href="<%= url %>" target="_blank"><%= url %></a>
+            </b>
+          </div>
+          <% } %> <% if (typeof error != "undefined") { %>
+          <div class="notification is-primary is-danger">
+            <button class="delete" type="button"></button>
+            <b><%= error %></b>
+          </div>
+          <% } %>
+          <div class="content is-medium">
+            <h1 class="title is-size-4"><%= title %></h1>
+
+          </div>
+
+          <form
+            id="submitProfileForm"
+            action="/"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <div class="notification is-primary">
+              <b>Please, save your changes!</b>
+              <br />
+              Make sure you save your answers (outside of this website), before
+              submitting in case something goes wrong.
+            </div>
+
+            <br /><br />
+
+            <div class="field">
+              <label class="label">Name*</label>
+              <div class="control">
+                <input
+                  name="fullname"
+                  class="input"
+                  type="text"
+                  placeholder="Please enter your name"
+                  value="<%= fullname %>"
+                  maxlength="50"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Year*</label>
+              <div class="control">
+                <input
+                  name="year"
+                  class="input"
+                  type="text"
+                  placeholder="Please enter the year"
+                  value="<%= year %>"
+                  maxlength="50"
+                  required
+                />
+              </div>
+            </div>
+<!-- HIER -->
+
+
+
+
+            <div class="content is-medium">
+              <p>
+                <b>Ready to submit?</b><br />
+                No worries, your page will not go live immediately.<br />
+              </p>
+
+              <br />
+            </div>
+
+            <div class="field is-grouped is-grouped-centered">
+              <p class="control">
+                <button
+                  type="submit"
+                  class="button is-primary is-large g-recaptcha"
+                  data-sitekey="<%= recaptchaKey %>"
+                  data-callback="onSubmit"
+                  data-size="invisible"
+                >
+                  I'm ready to submit
+                </button>
+              </p>
+              <br /><br /><br />
+              <br /><br /><br />
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <% if(env === 'production') { %>
+    <script
+      src="https://www.google.com/recaptcha/api.js"
+      nonce="<%= nonce %>"
+      async
+      defer
+    ></script>
+    <% } %>
+
+
+    <script nonce="<%= nonce %>">
+
+      function onSubmit(token) {
+        var button = document.getElementsByTagName('button');
+        button[0].disabled = true;
+        document.getElementById('submitProfileForm').submit();
+      }
+
+
+      document.addEventListener('DOMContentLoaded', () => {
+        (document.querySelectorAll('.notification .delete') || []).forEach(
+          $delete => {
+            $notification = $delete.parentNode;
+            $delete.addEventListener('click', () => {
+              $notification.parentNode.removeChild($notification);
+            });
+          }
+        );
+
+
+      });
+    </script>
+  </body>
+</html>
